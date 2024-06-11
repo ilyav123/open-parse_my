@@ -182,7 +182,7 @@ def predict_cells(
     return clean_token_list
 
 
-def table_img_to_html(table_image: Image) -> str:
+def table_img_to_html(table_image: Image) -> Tuple[str, List[str],List[BBox]]:
     """
     Note this expects the image to already be cropped to the table
     """
@@ -191,10 +191,11 @@ def table_img_to_html(table_image: Image) -> str:
 
     pred_html = predict_html(image_tensor)
     pred_bbox = predict_bboxes(image_tensor, image_size=table_image.size)
-    pred_cell_lst = predict_cells(image_tensor, pred_bbox, table_image)
+    #pred_cell_lst = predict_cells(image_tensor, pred_bbox, table_image)
+    pred_cell_lst=[]
 
     table_str_lst = build_table_from_html_and_cell(pred_html, pred_cell_lst)
     table_str = "".join(table_str_lst)
     table_str = html_table_template(table_str)
 
-    return table_str
+    return (table_str,pred_html,pred_bbox)

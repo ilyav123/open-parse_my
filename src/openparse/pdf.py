@@ -189,10 +189,11 @@ class Pdf:
         nodes: List[Node],
         page_nums: Optional[List[int]] = None,
         annotations: Optional[List[str]] = None,
-    ):
+    ) -> Any:
         """
         Display a single page of a PDF file using IPython.
         Optionally, display a piece of text on top of the bounding box.
+        returns Image object
         """
         try:
             from IPython.display import Image, display  # type: ignore
@@ -210,7 +211,9 @@ class Pdf:
         for page_num in page_nums:
             page = marked_up_doc[page_num]
             img_data = page.get_pixmap().tobytes("png")
-            display(Image(data=img_data))
+            img=Image(data=img_data)
+            display(img)
+            #return img
 
     def export_with_bboxes(
         self,

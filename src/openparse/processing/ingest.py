@@ -35,12 +35,34 @@ class IngestionPipeline(ABC):
 
     def run(self, nodes: List[Node]) -> List[Node]:
         nodes = sorted(nodes)
+        if self.verbose:
+            self._print_nodes_info(nodes)
         for transform_func in self.transformations:
             if self.verbose:
                 print("Processing with", transform_func.__class__.__name__)
             nodes = transform_func.process(sorted(nodes))
+            if self.verbose:
+                self._print_nodes_info(nodes)
 
         return nodes
+
+    def _print_nodes_info(self,nodes: List[Node]):
+        print (f"Nodes count: {len(nodes)}")
+        for i, node in enumerate(nodes[:20]):
+            header=f"Node {i} l={len(node.text)} t={node.tokens} "
+            if node.is_small:
+                header+="sm=Y "
+            else:
+                header+="sm=N "
+            if node.is_stub:
+                header+="st=Y "
+            else:
+                header+="st=N "
+            if len(node.text) > 800000:
+                print(f"{header}{node.text[:40]}..{node.text[-40:]}")
+            else:
+                print(f"{header}{node.text}")
+        print()
 
     def append_transform(self, transform: ProcessingStep) -> None:
         """

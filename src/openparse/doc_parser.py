@@ -57,7 +57,7 @@ class DocumentParser:
         table_args (Optional[Union[TableTransformersArgsDict, PyMuPDFArgsDict]]): Arguments to customize table parsing.
     """
 
-    _verbose: bool = False
+    _verbose: bool = True
 
     def __init__(
         self,
